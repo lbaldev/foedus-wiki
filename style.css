@@ -582,3 +582,91 @@ body {
 .deity.ignia     { border-left-color: #a8401a; background: rgba(168, 64, 26, 0.06); }
 .deity.orosio    { border-left-color: #6e7a4e; background: rgba(110, 122, 78, 0.06); }
 .deity.macaria   { border-left-color: #7a6a8b; background: rgba(122, 106, 139, 0.06); }
+
+/* === REGION CHILDREN (subpáginas anidadas bajo su región padre) === */
+
+.region-children {
+    margin-left: 1.2rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--border-parchment);
+    margin-bottom: 1rem;
+}
+
+/* === BÚSQUEDA === */
+
+.search-page {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.search-input {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.15rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--border-parchment);
+    border-radius: 3px;
+    background: var(--bg-content-alt);
+    color: var(--ink);
+    outline: none;
+    width: 100%;
+}
+
+.search-input:focus {
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+}
+
+.search-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin: 0;
+}
+
+.search-result {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--border-parchment);
+}
+
+.search-result:last-child {
+    border-bottom: none;
+}
+
+.search-result-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.search-result-title a {
+    color: var(--red-accent);
+    text-decoration: none;
+}
+
+.search-result-title a:hover {
+    color: #a82020;
+    text-decoration: underline;
+}
+
+.search-result-tags {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+}
+
+.search-result-excerpt {
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-top: 0.3rem;
+    line-height: 1.4;
+}
+
+.search-empty {
+    color: var(--text-muted);
+    font-style: italic;
+}

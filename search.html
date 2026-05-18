@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Búsqueda — Foedus</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="site-wrapper">
+    <nav class="sidebar">
+        <div class="sidebar-title"><a href="index.html">Foedus</a><div class="sidebar-subtitle">Wiki de Campaña</div></div>
+        <div class="nav-section"><div class="nav-section-title">Navegación</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="npcs/index.html">NPCs</a></li>
+            <li><a href="regiones/index.html">Regiones</a></li>
+            <li><a href="facciones/index.html">Facciones</a></li>
+            <li><a href="historia/index.html">Historia</a></li>
+            <li><a href="sesiones/index.html">Sesiones</a></li>
+            <li><a href="search.html" class="active">Búsqueda</a></li>
+        </ul></div>
+    </nav>
+    <main class="content-area">
+        <nav class="breadcrumbs">
+            <a href="index.html">Inicio</a><span class="sep">›</span>
+            <span class="current">Búsqueda</span>
+        </nav>
+        <header class="page-header">
+            <h1>Búsqueda</h1>
+        </header>
+        <article class="page-content">
+            <div class="search-page">
+                <input type="search" id="query" class="search-input" placeholder="Buscar en la wiki…" autocomplete="off" autofocus>
+                <p class="search-hint" id="hint">Cargando índice…</p>
+                <div id="results"></div>
+            </div>
+        </article>
+    </main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.9/lunr.min.js"></script>
+<script>
+let searchData = [];
+let idx = null;
+
+async function initSearch() {
+    try {
+        const resp = await fetch('search-index.json');
+        if (!resp.ok) throw new Error('índice no encontrado');
+        searchData = await resp.json();
+        idx = lunr(function () {
+            this.ref('id');
+            this.field('title', { boost: 10 });
+            this.field('tags',  { boost: 5  });
+            this.field('body');
+            searchData.forEach(d => this.add(d));
+        });
+        document.getElementById('hint').textContent = searchData.length + ' páginas indexadas. Escribe para buscar.';
+        const q = new URLSearchParams(location.search).get('q');
+        if (q) { document.getElementById('query').value = q; doSearch(q); }
+    } catch (e) {
+        document.getElementById('hint').textContent = 'Error al cargar el índice. Ejecuta build.py primero.';
+    }
+}
+
+function doSearch(query) {
+    const resultsEl = document.getElementById('results');
+    const hint = document.getElementById('hint');
+    if (!idx || query.trim().length < 2) {
+        resultsEl.innerHTML = '';
+        if (idx) hint.textContent = searchData.length + ' páginas indexadas. Escribe para buscar.';
+        return;
+    }
+    let results = [];
+    try {
+        results = idx.search(query);
+    } catch (_) {
+        try { results = idx.search(query.trim() + '*'); } catch (__) { results = []; }
+    }
+    hint.textContent = results.length + ' resultado(s) para "' + esc(query) + '".';
+    if (!results.length) {
+        resultsEl.innerHTML = '<p class="search-empty">Sin resultados.</p>';
+        return;
+    }
+    resultsEl.innerHTML = results.slice(0, 30).map(r => {
+        const doc = searchData.find(d => d.id === r.ref);
+        if (!doc) return '';
+        const excerpt = doc.body ? doc.body.substring(0, 200) + (doc.body.length > 200 ? '…' : '') : '';
+        return '<div class="search-result">'
+            + '<div class="search-result-title"><a href="' + doc.url + '">' + esc(doc.title) + '</a></div>'
+            + (doc.tags ? '<div class="search-result-tags">' + esc(doc.tags) + '</div>' : '')
+            + (excerpt   ? '<div class="search-result-excerpt">' + esc(excerpt) + '</div>' : '')
+            + '</div>';
+    }).join('');
+}
+
+function esc(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+initSearch();
+document.getElementById('query').addEventListener('input', e => doSearch(e.target.value));
+</script>
+</body>
+</html>
