@@ -528,3 +528,57 @@ body {
         padding: 1.5rem 1.2rem;
     }
 }
+
+/* === DEIDADES (cosmologia) === */
+
+.deity {
+    border-left: 4px solid var(--gold-dim);
+    background: rgba(201, 168, 76, 0.05);
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.deity > h3 {
+    margin-top: 0;
+    margin-bottom: 0.2rem;
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+}
+
+.deity .epithets {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+    display: block;
+}
+
+.deity .deity-meta {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px dashed var(--border-parchment);
+}
+
+.deity .deity-meta strong {
+    color: var(--ink);
+}
+
+.deity .deity-meta .meta-row {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.deity p:last-child {
+    margin-bottom: 0;
+}
+
+/* Variantes por color para distinguir mejor */
+.deity.vagrun    { border-left-color: #c9a84c; background: rgba(201, 168, 76, 0.06); }
+.deity.valdaro   { border-left-color: #8b6b3a; background: rgba(139, 107, 58, 0.06); }
+.deity.ignia     { border-left-color: #a8401a; background: rgba(168, 64, 26, 0.06); }
+.deity.orosio    { border-left-color: #6e7a4e; background: rgba(110, 122, 78, 0.06); }
+.deity.macaria   { border-left-color: #7a6a8b; background: rgba(122, 106, 139, 0.06); }
